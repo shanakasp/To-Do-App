@@ -81,6 +81,23 @@ router.put("/todo/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to update todo" });
   }
 });
-router.delete("/todo/:id", (req, res) => {});
+router.delete("/todo/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const todo = await Task.findByPk(id);
+
+    if (!todo) {
+      return res.status(404).json({ error: "Todo not found" });
+    }
+
+    await todo.destroy();
+
+    res.status(204).json();
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+    res.status(500).json({ error: "Failed to delete todo" });
+  }
+});
 
 module.exports = router;
