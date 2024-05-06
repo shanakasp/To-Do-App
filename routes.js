@@ -81,6 +81,7 @@ router.put("/todo/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to update todo" });
   }
 });
+
 router.delete("/todo/:id", async (req, res) => {
   const { id } = req.params;
 
