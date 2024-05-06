@@ -46,10 +46,41 @@ router.get("/task", async (req, res) => {
   }
 });
 
-router.get("/todo/:id", (req, res) => {});
+router.get("/todo/:id", async (req, res) => {
+  const { id } = req.params;
 
-router.put("/todo/:id", (req, res) => {});
+  try {
+    const tasks = await Task.findByPk(id);
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error("Error fetching data");
+    res.status(400).json({ error: " Failed to load data" });
+  }
+});
 
+router.put("/todo/:id", async (req, res) => {
+  const { id } = req.params;
+  const { content, description } = req.body;
+
+  try {
+    const todo = await Task.findByPk(id);
+
+    if (!todo) {
+      return res.status(404).json({ error: "Todo not found" });
+    }
+
+    // Update todo properties
+    todo.content = content;
+    todo.description = description;
+
+    await todo.save();
+
+    res.status(200).json(todo);
+  } catch (error) {
+    console.error("Error updating todo:", error);
+    res.status(500).json({ error: "Failed to update todo" });
+  }
+});
 router.delete("/todo/:id", (req, res) => {});
 
 module.exports = router;
