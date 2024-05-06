@@ -2,12 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const { sequelize, connectToDb } = require("./db");
 const apiRoutes = require("./routes");
+// const body_parser = require("body_parser");
 
 const app = express();
 const PORT = 3000;
 
+// app.use(body_parser);
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
+
+// app.use(body_parser);
 
 // API Routes
 app.use("/api", apiRoutes);

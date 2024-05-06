@@ -1,18 +1,29 @@
 const express = require("express");
-const User = require("./models");
+const Task = require("./models");
 const router = express.Router();
 
-router.get("/todos", async (req, res) => {
+router.post("/todos", async (req, res) => {
+  const { content, description } = req.body; // Use req.body to access request body data
+
+  const newTask = Task.build({
+    content,
+    description,
+  });
+
   try {
-    const tasks = await User.findAll(); // Fetch all tasks from User model
-    res.status(200).json(tasks); // Send tasks as JSON response with status 200
+    await newTask.save();
+    res.status(201).json(newTask); // Respond with the newly created task
   } catch (error) {
-    console.error("Error fetching tasks:", error);
-    res.status(500).json({ error: "Failed to fetch tasks" }); // Handle error with 500 status
+    console.error("Error saving task:", error);
+    res.status(400).json({ error: "Failed to create task" });
   }
 });
 
-router.post("/todos", (req, res) => {});
+// router.post("/todos", (req, res) => {
+//   const data = request.body;
+
+//   response.status(201).json(data);
+// });
 
 router.get("/todo/:id", (req, res) => {});
 

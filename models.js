@@ -1,6 +1,6 @@
 const { sequelize } = require("./db");
 const { DataTypes } = require("sequelize");
-const User = sequelize.define("Task", {
+const Task = sequelize.define("Task", {
   content: {
     type: DataTypes.STRING,
     validate: {
@@ -18,4 +18,4 @@ const User = sequelize.define("Task", {
 
 // sequelize.sync();
 
-module.exports = User;
+module.exports = Task;
